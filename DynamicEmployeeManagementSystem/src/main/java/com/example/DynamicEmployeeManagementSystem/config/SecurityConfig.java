@@ -32,7 +32,9 @@ public class SecurityConfig {
         http
                 .csrf(cutomizet -> cutomizet.disable())
                 .authorizeHttpRequests(authz -> authz
-                       // .requestMatchers(HttpMethod.POST, "api/users").permitAll()
+                        .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers("/employees/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/employees/*").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -40,12 +42,11 @@ public class SecurityConfig {
         return http.build();
 
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // No password encoding
+        return new BCryptPasswordEncoder(); // No password encoding
     }
-
-
 
 
 }

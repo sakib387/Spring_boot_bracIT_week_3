@@ -1,6 +1,8 @@
 package com.example.DynamicEmployeeManagementSystem.model;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -19,14 +21,14 @@ public class Employee {
 
     private double salary;
 
-   @Column(columnDefinition = "json")
-
-    private String additionalAttributes;
+    @Type(JsonType.class) // Use Hibernate Types to handle JSON serialization
+    @Column(columnDefinition = "json") // Define as a JSON column in the database
+    private AdditionalAttribute additionalAttributes;
 
     public Employee() {
     }
 
-    public Employee(Long employeeId, String name, String designation, String department, LocalDate dateOfJoining, double salary, String additionalAttributes) {
+    public Employee(Long employeeId, String name, String designation, String department, LocalDate dateOfJoining, double salary, AdditionalAttribute additionalAttributes) {
         this.employeeId = employeeId;
         this.name = name;
         this.designation = designation;
@@ -35,6 +37,7 @@ public class Employee {
         this.salary = salary;
         this.additionalAttributes = additionalAttributes;
     }
+
 
     public Long getEmployeeId() {
         return employeeId;
@@ -84,11 +87,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getAdditionalAttributes() {
+    public AdditionalAttribute getAdditionalAttributes() {
         return additionalAttributes;
     }
 
-    public void setAdditionalAttributes(String additionalAttributes) {
+    public void setAdditionalAttributes(AdditionalAttribute additionalAttributes) {
         this.additionalAttributes = additionalAttributes;
     }
 }

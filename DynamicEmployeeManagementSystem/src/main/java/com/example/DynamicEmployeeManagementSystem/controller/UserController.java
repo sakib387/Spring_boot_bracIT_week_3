@@ -2,11 +2,13 @@ package com.example.DynamicEmployeeManagementSystem.controller;
 
 import com.example.DynamicEmployeeManagementSystem.model.User;
 import com.example.DynamicEmployeeManagementSystem.service.UserService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/auth")
 public class UserController {
 
     private final UserService userService;
@@ -17,16 +19,22 @@ public class UserController {
     }
 
     // Registration endpoint (POST)
-    @PostMapping( )
-    public User registerUser(@RequestBody User user) {
+    @PostMapping("/login")
+    public User loginUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName=authentication.getName();
+        System.out.println(userName);
         try {
-             return userService.registerUser(user);
+            return userService.login(userName);
         } catch (RuntimeException e) {
-           throw new NullPointerException();
+            throw e;
         }
     }
-    @GetMapping
-    public String kiso(){
-      return "kkdk";
+
+    @PostMapping("/register")
+    public User registerUser(@RequestBody User user1) {
+        System.out.println(user1.getIsAdmin());
+
+        return userService.registerUser(user1) ;
     }
 }

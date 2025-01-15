@@ -2,37 +2,45 @@ package com.example.DynamicEmployeeManagementSystem.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
 
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
+    private String isAdmin;
     private String username;
     private String password;
 
-    private boolean isAdmin;
-
+ 
     public User() {
     }
 
-    public User(Long id, String username, String password, boolean isAdmin) {
-        this.userId = id;
+
+    public User(Long userId, String amin, String username, String password) {
+        this.userId = userId;
+        this.isAdmin = amin;
         this.username = username;
         this.password = password;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
         this.isAdmin = isAdmin;
     }
 
-    public Long getId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setId(Long id) {
-        this.userId = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -51,11 +59,8 @@ public class User {
         this.password = password;
     }
 
-    public String getRoles() {
-        if(isAdmin)
-        return "ROLE_ADMIN";
-        return "ROLE_USER";
-    }
+
+
 
     @Override
     public String toString() {
@@ -65,9 +70,5 @@ public class User {
                 ", password='" + password + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
-    }
-
-    public void setRoles(boolean isAdmin) {
-        this.isAdmin = isAdmin;
     }
 }
