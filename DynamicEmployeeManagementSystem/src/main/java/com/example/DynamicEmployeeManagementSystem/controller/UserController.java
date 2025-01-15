@@ -1,5 +1,6 @@
 package com.example.DynamicEmployeeManagementSystem.controller;
 
+import com.example.DynamicEmployeeManagementSystem.model.Employee;
 import com.example.DynamicEmployeeManagementSystem.model.User;
 import com.example.DynamicEmployeeManagementSystem.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -37,4 +38,5 @@ public class UserController {
 
         return userService.registerUser(user1) ;
     }
+
 }

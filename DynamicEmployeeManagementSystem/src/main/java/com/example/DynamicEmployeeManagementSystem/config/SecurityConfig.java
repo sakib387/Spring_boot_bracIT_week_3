@@ -33,8 +33,10 @@ public class SecurityConfig {
                 .csrf(cutomizet -> cutomizet.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/*").permitAll()
-                        .requestMatchers("/employees/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/employees/*").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/employees").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/employees/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/employees/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/employees/*").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

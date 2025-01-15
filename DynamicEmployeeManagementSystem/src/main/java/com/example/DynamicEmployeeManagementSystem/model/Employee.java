@@ -94,4 +94,17 @@ public class Employee {
     public void setAdditionalAttributes(AdditionalAttribute additionalAttributes) {
         this.additionalAttributes = additionalAttributes;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeId +
+                ", name='" + name + '\'' +
+                ", designation='" + designation + '\'' +
+                ", department='" + department + '\'' +
+                ", dateOfJoining=" + dateOfJoining +
+                ", salary=" + salary +
+                ", additionalAttributes=" + additionalAttributes +
+                '}';
+    }
 }

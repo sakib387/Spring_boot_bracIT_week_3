@@ -35,6 +35,7 @@ public class UserService {
 
         if (user != null) {
             System.out.println("User retrieved from Redis cache");
+
             return user;
         }
 
