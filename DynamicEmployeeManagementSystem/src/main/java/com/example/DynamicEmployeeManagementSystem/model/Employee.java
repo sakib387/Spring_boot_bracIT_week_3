@@ -1,5 +1,6 @@
 package com.example.DynamicEmployeeManagementSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
@@ -16,28 +17,42 @@ public class Employee {
     private String name;
     private String designation;
     private String department;
-
-    private LocalDate dateOfJoining;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private String dateOfJoining;
 
     private double salary;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_add")
+    private Address address;
+
     @Type(JsonType.class) // Use Hibernate Types to handle JSON serialization
     @Column(columnDefinition = "json") // Define as a JSON column in the database
-    private AdditionalAttribute additionalAttributes;
+    private Map<String,Object> additionalAttributes;
+
 
     public Employee() {
     }
 
-    public Employee(Long employeeId, String name, String designation, String department, LocalDate dateOfJoining, double salary, AdditionalAttribute additionalAttributes) {
+
+    public Employee(Long employeeId, String name, String designation, String department, String dateOfJoining, double salary, Address address, Map<String,Object> additionalAttributes) {
         this.employeeId = employeeId;
         this.name = name;
         this.designation = designation;
         this.department = department;
         this.dateOfJoining = dateOfJoining;
         this.salary = salary;
+        this.address = address;
         this.additionalAttributes = additionalAttributes;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public Long getEmployeeId() {
         return employeeId;
@@ -71,11 +86,11 @@ public class Employee {
         this.department = department;
     }
 
-    public LocalDate getDateOfJoining() {
+    public String getDateOfJoining() {
         return dateOfJoining;
     }
 
-    public void setDateOfJoining(LocalDate dateOfJoining) {
+    public void setDateOfJoining(String dateOfJoining) {
         this.dateOfJoining = dateOfJoining;
     }
 
@@ -87,11 +102,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public AdditionalAttribute getAdditionalAttributes() {
+    public Map<String,Object> getAdditionalAttributes() {
         return additionalAttributes;
     }
 
-    public void setAdditionalAttributes(AdditionalAttribute additionalAttributes) {
+    public void setAdditionalAttributes(Map<String,Object> additionalAttributes) {
         this.additionalAttributes = additionalAttributes;
     }
 
@@ -102,8 +117,9 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", designation='" + designation + '\'' +
                 ", department='" + department + '\'' +
-                ", dateOfJoining=" + dateOfJoining +
+                ", dateOfJoining='" + dateOfJoining + '\'' +
                 ", salary=" + salary +
+                ", address=" + address +
                 ", additionalAttributes=" + additionalAttributes +
                 '}';
     }

@@ -1,5 +1,6 @@
 package com.example.DynamicEmployeeManagementSystem.config;
 
+import com.example.DynamicEmployeeManagementSystem.jwt.JwtFilter;
 import com.example.DynamicEmployeeManagementSystem.repository.UserRepository;
 import com.example.DynamicEmployeeManagementSystem.service.CustomUserDetailsService;
 import com.example.DynamicEmployeeManagementSystem.service.UserService;
@@ -8,10 +9,12 @@ import org.springframework.cglib.proxy.NoOp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +22,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 
 public class SecurityConfig {
 
+
+    private JwtFilter jwtFilter;
+
+    private UserDetailsService userDetailsService;
+
+    public SecurityConfig(JwtFilter jwtFilter, UserDetailsService userDetailsService) {
+        this.jwtFilter = jwtFilter;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,15 +52,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/employees/*").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // No password encoding
+        return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+        return builder.getAuthenticationManager();
     }
 
 

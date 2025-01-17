@@ -22,11 +22,14 @@ public class EmployeeController {
     public List<Employee> fetchAllEmployee() {
         return employeeService.allEmployee();
     }
+
+    //Pagination
     @GetMapping("/page")
-    public List<Employee> fetchPageByEmployee(@RequestParam Long pageNo,@RequestParam Long pageSize) {
-        return (List<Employee>) employeeService.paginationEmployee(pageNo,pageSize);
+    public List<Employee> fetchPageByEmployee(@RequestParam Long pageNo, @RequestParam Long pageSize) {
+        return (List<Employee>) employeeService.paginationEmployee(pageNo, pageSize);
     }
 
+    // for max and min salary
     @GetMapping("/special-employee")
     public List<Employee> specialEmployee() {
         return employeeService.specialEmployee();
@@ -34,6 +37,7 @@ public class EmployeeController {
 
     @PostMapping
     public Employee addEmployee(@RequestBody Employee employee) {
+        System.out.println(employee);
         return employeeService.save(employee);
     }
 
@@ -41,6 +45,12 @@ public class EmployeeController {
     public Employee findEmployee(@PathVariable Long employeeId) {
         return employeeService.findEmployeeById(employeeId);
     }
+
+    @GetMapping("/ranking")
+    public List<Object[]> rankingOfEmployee( ) {
+        return employeeService.rankingOfEmployee( );
+    }
+
 
     @PutMapping("/{employeeId}")
     public Employee updateEmployee(@RequestBody Employee employee, @PathVariable Long employeeId) {

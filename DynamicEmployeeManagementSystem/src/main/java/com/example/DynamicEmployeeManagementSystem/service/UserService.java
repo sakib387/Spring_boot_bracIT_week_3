@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -26,16 +28,19 @@ public class UserService {
             throw new AlreadyRegistered("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user);
+        // System.out.println(user);
+        Duration ttl = Duration.ofMinutes(5);
+        redisTemplate.opsForValue().set(user.getUsername(), user, ttl);
         return userRepository.save(user);
     }
 
     public User login(String userName) {
+
         User user = (User) redisTemplate.opsForValue().get(userName);
 
         if (user != null) {
             System.out.println("User retrieved from Redis cache");
-
+            //  redisTemplate.delete(userName);
             return user;
         }
 
@@ -46,7 +51,8 @@ public class UserService {
         }
 
         // Cache the user in Redis
-        redisTemplate.opsForValue().set(userName, user);
+        Duration ttl = Duration.ofMinutes(5);
+        redisTemplate.opsForValue().set(userName, user, ttl);
 
         System.out.println("User retrieved from database and cached in Redis");
         return user;
