@@ -66,11 +66,7 @@ Develop a robust Dynamic Employee Management System that showcases expertise in:
 | GET    | `/employees`  | Search, filter, and paginate employees              | Admin, User |
 |        | Query params: | `name`, `department`, `minSalary`, `maxSalary`, etc.|             |
 
-### **Bulk Operations**
-| Method | Endpoint            | Description                           | Access     |
-|--------|----------------------|---------------------------------------|------------|
-| POST   | `/employees/bulk`   | Add or update multiple employees       | Admin only |
-
+ 
 ---
 
 ## Development Guidelines
