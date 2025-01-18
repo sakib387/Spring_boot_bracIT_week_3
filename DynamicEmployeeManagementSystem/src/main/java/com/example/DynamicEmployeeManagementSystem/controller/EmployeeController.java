@@ -47,8 +47,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/ranking")
-    public List<Object[]> rankingOfEmployee( ) {
-        return employeeService.rankingOfEmployee( );
+    public List<Object[]> rankingOfEmployee() {
+        return employeeService.rankingOfEmployee();
     }
 
 
